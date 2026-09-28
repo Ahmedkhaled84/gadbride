@@ -26,7 +26,10 @@
 
     .bg-layer {
       position: fixed; inset: 0;
-      background: url('./bg.jpg') center center / cover no-repeat;
+      background-image: url('bg.jpg');
+      background-position: center center;
+      background-size: cover;
+      background-repeat: no-repeat;
       filter: brightness(0.28) saturate(0.8);
       transform: scale(1.05);
       animation: bgBreath 12s ease-in-out infinite;
@@ -85,7 +88,7 @@
     .logo-wrap { position: relative; margin-bottom: 0.6rem; opacity: 0; animation: revealDown 1.4s cubic-bezier(0.22,1,0.36,1) 0.3s forwards; }
     .logo-wrap img {
       height: clamp(200px, 38vh, 420px); width: auto; max-width: 90vw;
-      filter: drop-shadow(0 0 40px rgba(201,168,76,0.75)) drop-shadow(0 0 90px rgba(201,168,76,0.35));
+      display: block;
       animation: logoGlow 4s ease-in-out infinite;
     }
     @keyframes logoGlow {
@@ -100,20 +103,6 @@
                 drop-shadow(0 0 140px rgba(201,168,76,0.5))
                 drop-shadow(0 0 200px rgba(180,130,20,0.3));
       }
-    }
-
-    .brand-name {
-      font-family: 'Cinzel Decorative', serif; font-size: clamp(2.2rem,7vw,6rem); font-weight: 700;
-      letter-spacing: 0.18em; color: transparent;
-      background: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold) 25%, var(--gold-shine) 50%, var(--gold) 75%, var(--gold-dark) 100%);
-      background-size: 200% 200%;
-      -webkit-background-clip: text; background-clip: text;
-      text-transform: uppercase;
-      animation: shimmer 5s ease-in-out infinite, revealDown 1.4s cubic-bezier(0.22,1,0.36,1) 0.6s both;
-    }
-    @keyframes shimmer {
-      0%,100% { background-position: 0% 50%; }
-      50%      { background-position: 100% 50%; }
     }
 
     .divider { display: flex; align-items: center; gap: 1rem; margin: 1.4rem 0; opacity: 0; animation: fadeIn 1.5s ease 1.2s forwards; }
@@ -196,43 +185,89 @@
     .notify-btn:hover { background-position: 100% 50%; transform: scale(1.02); }
     .notify-btn:active { transform: scale(0.98); }
 
+    .success-msg { display: none; font-family: 'Cormorant Garamond', serif; font-style: italic; color: var(--gold-light); font-size: 1.1rem; letter-spacing: 0.1em; animation: fadeIn 0.6s ease; }
+
+    /* Social Buttons */
+    .social-wrap {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      margin-top: 1.2rem;
+    }
+    .social-link {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      padding: 0.6rem 1.4rem;
+      border: 1px solid rgba(201,168,76,0.28);
+      text-decoration: none;
+      color: var(--gold);
+      font-family: 'Cinzel', serif;
+      font-size: 0.58rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      background: rgba(10, 7, 5, 0.45);
+      backdrop-filter: blur(8px);
+      overflow: hidden;
+      transition: all 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .social-link::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(201,168,76,0.12) 0%, rgba(201,168,76,0.04) 100%);
+      opacity: 0;
+      transition: opacity 0.45s ease;
+    }
+    .social-link::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 0; height: 1px;
+      background: linear-gradient(90deg, var(--gold-dark), var(--gold-shine), var(--gold-dark));
+      transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .social-link:hover::before { opacity: 1; }
+    .social-link:hover::after { width: 100%; }
+    .social-link:hover {
+      border-color: rgba(201,168,76,0.6);
+      color: var(--gold-shine);
+      box-shadow: 0 0 28px rgba(201,168,76,0.18), inset 0 0 18px rgba(201,168,76,0.06);
+      transform: translateY(-3px);
+    }
+    .social-link svg {
+      width: 15px; height: 15px;
+      fill: currentColor;
+      flex-shrink: 0;
+      position: relative; z-index: 1;
+      transition: transform 0.4s ease;
+    }
+    .social-link:hover svg { transform: scale(1.12) rotate(-4deg); }
+    .social-link span { position: relative; z-index: 1; }
+
     .corner { position: fixed; z-index: 3; width: clamp(60px,10vw,120px); height: clamp(60px,10vw,120px); opacity: 0; animation: fadeIn 2s ease 2s forwards; }
     .corner-tl { top: 1.5rem; left: 1.5rem; }
     .corner-tr { top: 1.5rem; right: 1.5rem; transform: scaleX(-1); }
     .corner-bl { bottom: 1.5rem; left: 1.5rem; transform: scaleY(-1); }
     .corner-br { bottom: 1.5rem; right: 1.5rem; transform: scale(-1,-1); }
 
-    .social-wrap { display: flex; gap: 1.5rem; margin-top: 1.2rem; opacity: 0; animation: fadeIn 2s ease 2.8s forwards; }
-    .social-link {
-      width: 56px; height: 56px; border: 1px solid rgba(201,168,76,0.4);
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      color: var(--gold); text-decoration: none;
-      transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1); position: relative; overflow: hidden;
-      background: rgba(10, 7, 5, 0.3); backdrop-filter: blur(4px);
-    }
-    .social-link::before {
-      content: ''; position: absolute; inset: 0;
-      background: linear-gradient(135deg, rgba(201,168,76,0.4), rgba(201,168,76,0.1));
-      transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-    }
-    .social-link:hover::before { transform: translateY(0); }
-    .social-link:hover { border-color: var(--gold-shine); box-shadow: 0 0 30px rgba(201,168,76,0.4), inset 0 0 15px rgba(201,168,76,0.2); color: var(--gold-shine); transform: translateY(-4px); }
-    .social-link svg { width: 22px; height: 22px; fill: currentColor; position: relative; z-index: 1; transition: transform 0.4s ease; }
-    .social-link:hover svg { transform: scale(1.15); }
-
     .domain-badge { position: fixed; bottom: 2.5rem; left: 2.5rem; z-index: 6; font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.3em; color: rgba(201,168,76,0.4); text-transform: uppercase; opacity: 0; animation: fadeIn 2s ease 3s forwards; }
 
     .scanline { position: fixed; inset: 0; z-index: 3; background: repeating-linear-gradient(to bottom, transparent, transparent 3px, rgba(0,0,0,0.03) 3px, rgba(0,0,0,0.03) 4px); pointer-events: none; }
-
-    .success-msg { display: none; font-family: 'Cormorant Garamond', serif; font-style: italic; color: var(--gold-light); font-size: 1.1rem; letter-spacing: 0.1em; animation: fadeIn 0.6s ease; }
 
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     @keyframes revealDown { from { opacity: 0; transform: translateY(-40px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes revealUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
 
     @media (max-height: 600px) { .logo-wrap img { height: 70px; } .tagline { display: none; } .notify-wrap { margin-top: 1rem; } }
-    @media (max-width: 480px) { .notify-input { width: 200px; } .count-separator { display: none; } .countdown-wrap { gap: 1.4rem; } .domain-badge { display: none; } }
+    @media (max-width: 480px) {
+      .notify-input { width: 200px; }
+      .count-separator { display: none; }
+      .countdown-wrap { gap: 1.4rem; }
+      .domain-badge { display: none; }
+      .social-link span { display: none; }
+      .social-link { padding: 0.6rem 0.9rem; }
+    }
   </style>
 </head>
 <body>
@@ -296,7 +331,7 @@
 
   <main class="stage" role="main">
     <div class="logo-wrap">
-      <img src="./122.png" alt="Gadbride Logo" id="logo-img" />
+      <img src="122.png" alt="Gadbride Logo" id="logo-img" />
     </div>
 
     <div class="divider" aria-hidden="true">
@@ -317,18 +352,23 @@
       <span class="count-separator">:</span>
       <div class="count-box"><span class="count-number" id="cd-seconds">00</span><span class="count-label">Seconds</span></div>
     </div>
+
     <div class="notify-wrap">
       <p class="notify-label">Be the first to know</p>
       <form class="notify-form" id="notify-form" onsubmit="handleNotify(event)">
         <input class="notify-input" type="email" id="notify-email" placeholder="Your email address..." required aria-label="Email address" />
         <button class="notify-btn" type="submit" id="notify-btn">Notify Me</button>
-            <p class="success-msg" id="success-msg">✦ &nbsp; Thank you. We will be in touch.</p>
+      </form>
+      <p class="success-msg" id="success-msg">&#10022; &nbsp; Thank you. We will be in touch.</p>
+
       <div class="social-wrap">
         <a href="https://www.instagram.com/gadbride/" target="_blank" rel="noopener" class="social-link" aria-label="Instagram" id="social-instagram">
           <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+          <span>Instagram</span>
         </a>
         <a href="https://www.facebook.com/profile.php?id=61595070322489" target="_blank" rel="noopener" class="social-link" aria-label="Facebook" id="social-facebook">
           <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          <span>Facebook</span>
         </a>
       </div>
     </div>
@@ -337,12 +377,11 @@
   <div class="domain-badge">gadbride.com</div>
 
   <script>
-    /* Logo fallback */
-    const logoImg = document.getElementById('logo-img');
+    var logoImg = document.getElementById('logo-img');
     logoImg.onerror = function() {
       this.style.display = 'none';
-      const wrap = this.parentElement;
-      const svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+      var wrap = this.parentElement;
+      var svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
       svg.setAttribute('viewBox','0 0 200 120');
       svg.setAttribute('width','180');
       svg.setAttribute('height','108');
@@ -351,53 +390,47 @@
       wrap.appendChild(svg);
     };
 
-    /* Coming Soon letters */
-    const text = "Coming Soon";
-    const el = document.getElementById('coming-soon-text');
-    text.split('').forEach((ch, i) => {
-      const span = document.createElement('span');
+    var text = "Coming Soon";
+    var el = document.getElementById('coming-soon-text');
+    text.split('').forEach(function(ch, i) {
+      var span = document.createElement('span');
       span.textContent = ch === ' ' ? '\u00A0' : ch;
-      span.style.animationDelay = (i * 0.08 + 1.4) + 's';
-      span.style.animationDuration = (2.5 + (i % 3) * 0.5) + 's';
       span.style.display = 'inline-block';
       span.style.animation = 'letterFloat ' + (2.5 + (i % 3) * 0.5) + 's ease-in-out ' + (i * 0.08 + 1.4) + 's infinite';
       el.appendChild(span);
     });
 
-    /* Particles */
-    const pc = document.getElementById('particles');
-    for (let i = 0; i < 35; i++) {
-      const p = document.createElement('div');
+    var pc = document.getElementById('particles');
+    for (var i = 0; i < 35; i++) {
+      var p = document.createElement('div');
       p.classList.add('particle');
-      const size = Math.random() * 4 + 1;
+      var size = Math.random() * 4 + 1;
       p.style.cssText = 'width:'+size+'px;height:'+size+'px;left:'+(Math.random()*100)+'%;--drift:'+((Math.random()-0.5)*200)+'px;animation-duration:'+(Math.random()*12+8)+'s;animation-delay:'+(Math.random()*10)+'s;';
       pc.appendChild(p);
     }
 
-    /* Rays */
-    const rc = document.getElementById('rays');
-    for (let i = 0; i < 14; i++) {
-      const r = document.createElement('div');
+    var rc = document.getElementById('rays');
+    for (var j = 0; j < 14; j++) {
+      var r = document.createElement('div');
       r.classList.add('ray');
-      const angle = -60 + i * (120/13);
+      var angle = -60 + j * (120/13);
       r.style.cssText = 'transform:rotate('+angle+'deg);animation-duration:'+(Math.random()*3+3)+'s;animation-delay:'+(Math.random()*2)+'s;height:'+(40+Math.random()*20)+'vh;';
       rc.appendChild(r);
     }
 
-    /* Countdown */
-    const target = new Date();
+    var target = new Date();
     target.setDate(target.getDate() + 31);
     target.setHours(0,0,0,0);
-    const pad = n => String(n).padStart(2,'0');
-    const prev = {d:-1,h:-1,m:-1,s:-1};
-    function flip(el, val, key) {
+    function pad(n) { return String(n).padStart(2,'0'); }
+    var prev = {d:-1,h:-1,m:-1,s:-1};
+    function flip(elem, val, key) {
       if (prev[key] !== val) {
-        el.classList.add('flip');
-        setTimeout(() => { el.textContent = pad(val); el.classList.remove('flip'); prev[key] = val; }, 200);
+        elem.classList.add('flip');
+        setTimeout(function() { elem.textContent = pad(val); elem.classList.remove('flip'); prev[key] = val; }, 200);
       }
     }
     function tick() {
-      const diff = Math.max(0, target.getTime() - Date.now());
+      var diff = Math.max(0, target.getTime() - Date.now());
       flip(document.getElementById('cd-days'),    Math.floor(diff/86400000), 'd');
       flip(document.getElementById('cd-hours'),   Math.floor((diff%86400000)/3600000), 'h');
       flip(document.getElementById('cd-minutes'), Math.floor((diff%3600000)/60000), 'm');
@@ -405,17 +438,15 @@
     }
     tick(); setInterval(tick, 1000);
 
-    /* Notify */
     function handleNotify(e) {
       e.preventDefault();
       document.getElementById('notify-form').style.display = 'none';
       document.getElementById('success-msg').style.display = 'block';
     }
 
-    /* Parallax */
-    document.addEventListener('mousemove', e => {
-      const x = (e.clientX/window.innerWidth - 0.5)*2;
-      const y = (e.clientY/window.innerHeight - 0.5)*2;
+    document.addEventListener('mousemove', function(e) {
+      var x = (e.clientX/window.innerWidth - 0.5)*2;
+      var y = (e.clientY/window.innerHeight - 0.5)*2;
       document.querySelector('.bg-layer').style.transform = 'scale(1.07) translate('+(x*8)+'px,'+(y*6)+'px)';
       document.getElementById('rays').style.transform = 'translate('+(x*15)+'px,'+(y*10)+'px)';
     });

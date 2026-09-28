@@ -330,10 +330,20 @@
   </div>
 
   <main class="stage" role="main">
-    <div class="logo-wrap">
-      <img src="122.png" alt="Gadbride Logo" id="logo-img" />
-    </div>
-
+ <figure class="logo-wrap">
+  <picture>
+    <!-- The picture tag is best practice and prepares you for future WebP/AVIF sources -->
+    <img 
+      src="122.png" 
+      alt="Gadbride Logo" 
+      id="logo-img" 
+      width="400" 
+      height="150" 
+      fetchpriority="high" 
+      decoding="async" 
+    />
+  </picture>
+</figure>
     <div class="divider" aria-hidden="true">
       <div class="divider-line"></div>
       <div class="divider-diamond"></div>

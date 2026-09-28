@@ -390,7 +390,7 @@
     var logoImg = document.getElementById('logo-img');
     logoImg.onerror = function() {
       this.style.display = 'none';
-      var wrap = this.parentElement;
+      var wrap = this.closest('.logo-wrap');
       var svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
       svg.setAttribute('viewBox','0 0 200 120');
       svg.setAttribute('width','180');

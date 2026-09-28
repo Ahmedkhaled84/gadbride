@@ -8,6 +8,10 @@
   <meta property="og:title" content="Gadbride — Coming Soon" />
   <meta property="og:description" content="A world of unparalleled luxury is arriving soon." />
   <meta property="og:url" content="https://gadbride.com" />
+  
+  <!-- Added Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png" />
+  
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Cinzel:wght@400;600;700;900&family=Cinzel+Decorative:wght@400;700&display=swap" rel="stylesheet" />
@@ -184,6 +188,7 @@
     }
     .notify-btn:hover { background-position: 100% 50%; transform: scale(1.02); }
     .notify-btn:active { transform: scale(0.98); }
+    .notify-btn:disabled { opacity: 0.7; cursor: not-allowed; }
 
     .success-msg { display: none; font-family: 'Cormorant Garamond', serif; font-style: italic; color: var(--gold-light); font-size: 1.1rem; letter-spacing: 0.1em; animation: fadeIn 0.6s ease; }
 
@@ -330,20 +335,20 @@
   </div>
 
   <main class="stage" role="main">
- <figure class="logo-wrap">
-  <picture>
-    <!-- The picture tag is best practice and prepares you for future WebP/AVIF sources -->
-    <img 
-      src="122.png" 
-      alt="Gadbride Logo" 
-      id="logo-img" 
-      width="400" 
-      height="150" 
-      fetchpriority="high" 
-      decoding="async" 
-    />
-  </picture>
-</figure>
+    <figure class="logo-wrap">
+      <picture>
+        <img 
+          src="122.png" 
+          alt="Gadbride Logo" 
+          id="logo-img" 
+          width="400" 
+          height="150" 
+          fetchpriority="high" 
+          decoding="async" 
+        />
+      </picture>
+    </figure>
+
     <div class="divider" aria-hidden="true">
       <div class="divider-line"></div>
       <div class="divider-diamond"></div>
@@ -353,6 +358,7 @@
       <p class="coming-soon" id="coming-soon-text" aria-label="Coming Soon"></p>
     </div>
     <p class="tagline">A world of unparalleled luxury — arriving soon.</p>
+    
     <div class="countdown-wrap" role="timer" aria-live="polite">
       <div class="count-box"><span class="count-number" id="cd-days">00</span><span class="count-label">Days</span></div>
       <span class="count-separator">:</span>
@@ -387,6 +393,7 @@
   <div class="domain-badge">gadbride.com</div>
 
   <script>
+    // --- Logo Fallback Logic ---
     var logoImg = document.getElementById('logo-img');
     logoImg.onerror = function() {
       this.style.display = 'none';
@@ -400,6 +407,7 @@
       wrap.appendChild(svg);
     };
 
+    // --- Coming Soon Text Animation ---
     var text = "Coming Soon";
     var el = document.getElementById('coming-soon-text');
     text.split('').forEach(function(ch, i) {
@@ -410,6 +418,7 @@
       el.appendChild(span);
     });
 
+    // --- Particle & Ray Effects ---
     var pc = document.getElementById('particles');
     for (var i = 0; i < 35; i++) {
       var p = document.createElement('div');
@@ -428,17 +437,20 @@
       rc.appendChild(r);
     }
 
-    var target = new Date();
-    target.setDate(target.getDate() + 31);
-    target.setHours(0,0,0,0);
+    // --- Fixed Countdown Logic ---
+    // Change this specific date and time to match your exact launch target
+    var target = new Date('2026-11-01T00:00:00');
+    
     function pad(n) { return String(n).padStart(2,'0'); }
     var prev = {d:-1,h:-1,m:-1,s:-1};
+    
     function flip(elem, val, key) {
       if (prev[key] !== val) {
         elem.classList.add('flip');
         setTimeout(function() { elem.textContent = pad(val); elem.classList.remove('flip'); prev[key] = val; }, 200);
       }
     }
+    
     function tick() {
       var diff = Math.max(0, target.getTime() - Date.now());
       flip(document.getElementById('cd-days'),    Math.floor(diff/86400000), 'd');
@@ -448,12 +460,45 @@
     }
     tick(); setInterval(tick, 1000);
 
-    function handleNotify(e) {
+    // --- Webhook Email Submission Logic ---
+    async function handleNotify(e) {
       e.preventDefault();
-      document.getElementById('notify-form').style.display = 'none';
-      document.getElementById('success-msg').style.display = 'block';
+      
+      var emailInput = document.getElementById('notify-email');
+      var submitBtn = document.getElementById('notify-btn');
+      
+      // Update UI to show loading state
+      submitBtn.textContent = "Sending...";
+      submitBtn.disabled = true;
+
+      try {
+        // Replace this URL with your actual Make.com Webhook URL
+        const WEBHOOK_URL = 'YOUR_WEBHOOK_URL_HERE';
+        
+        await fetch(WEBHOOK_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: emailInput.value,
+            source: 'Gadbride Coming Soon',
+            timestamp: new Date().toISOString()
+          })
+        });
+
+        // If successful, hide form and show success message
+        document.getElementById('notify-form').style.display = 'none';
+        document.getElementById('success-msg').style.display = 'block';
+        
+      } catch (error) {
+        console.error('Submission failed:', error);
+        submitBtn.textContent = "Error. Retry";
+        submitBtn.disabled = false;
+      }
     }
 
+    // --- Mouse Parallax Effect ---
     document.addEventListener('mousemove', function(e) {
       var x = (e.clientX/window.innerWidth - 0.5)*2;
       var y = (e.clientY/window.innerHeight - 0.5)*2;
